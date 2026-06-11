@@ -69,11 +69,17 @@ export REPO_DIR="$SCRIPT_DIR"
 
 run() {
   local script="$1"
-  if [[ -x "$script" ]]; then
-    log "Running $(basename "$script")"
-    bash "$script" 2>&1 | tee -a "$LOG"
-  else
+  if [[ ! -x "$script" ]]; then
     warn "Skipping $script (not executable)"
+    return
+  fi
+  log "Running $(basename "$script")"
+  # 99-post-install is interactive — don't pipe through tee or it'll
+  # buffer prompts and break `read`. Other scripts can stream to the log.
+  if [[ "$(basename "$script")" == 99-* ]]; then
+    bash "$script"
+  else
+    bash "$script" 2>&1 | tee -a "$LOG"
   fi
 }
 

@@ -102,14 +102,21 @@ If you re-export, replace the same file — ytermusic re-reads it on launch.
 
 ## After install
 
-The final banner from `99-post-install.sh` lists every manual step. The big ones:
+The last script, `99-post-install.sh`, is **interactive** — it walks you through every step the OS won't let us automate, runs what it can, and pauses where it must. Steps:
 
-1. **Log out + log back in.** Fn-keys, `chsh`, and Accessibility permissions don't take effect mid-session.
-2. **Grant Accessibility + Screen Recording** to AeroSpace, Hammerspoon, Sketchybar in System Settings.
-3. **Sign in:** `atuin login`, `gh auth login`, ssh-keygen and paste to GitHub, `/login` in Claude Code, sign into Postman.
-4. **Ghostty:** Settings → Make Default Terminal.
-5. **Hermes:** copy `~/.hermes/config.yaml.example` → `~/.hermes/config.yaml`, fill in.
-6. **ytermusic:** follow the YT cookie section above.
+1. **Login shell:** `chsh -s` to brew's zsh (asks for your password).
+2. **SSH key:** prompts for an email, generates ed25519, adds to keychain.
+3. **gh auth login:** opens browser, you paste the one-time code.
+4. **Uploads the pubkey** to GitHub via `gh ssh-key add` — no manual paste.
+5. **Atuin:** offers register / login / skip.
+6. **Permissions:** opens the System Settings panels for Accessibility and Screen Recording — you click the toggles for AeroSpace, Hammerspoon, Sketchybar and press ENTER.
+7. **Claude Code:** opens the app so you can run `/login`.
+8. **Ghostty:** opens it so you can pick "Make Default Terminal".
+9. **Hermes config:** copies the example into place, optionally opens in `$EDITOR`.
+10. **ytermusic cookie:** points you at the README section below; confirms the file exists.
+11. **Extra Ollama models:** prompts for any model name beyond the four defaults.
+
+After that, **log out + log back in** (or reboot) so Fn-keys, `chsh`, and Accessibility grants settle.
 
 ---
 
