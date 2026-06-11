@@ -1,0 +1,63 @@
+
+# Disable Claude experimental betas
+export CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1
+
+# Auto-start tmux
+if command -v tmux &>/dev/null && [ -z "$TMUX" ]; then
+  tmux new-session -A -s main
+fi
+
+# ── Omachy managed (do not edit between these markers) ──
+eval "$(starship init zsh)"
+eval "$(fzf --zsh)"
+eval "$(atuin init zsh)"
+set -o vi
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fastfetch
+dev() { sh ~/.config/omachy/dev-session.sh "$@"; }
+# ── End Omachy managed ──
+
+# ── Custom dev workspace: `setup <name>` (default: x) ──────────────────────────
+# Layout:  yazi | claude | (ytermusic / lazyvim)
+#   +--------+-----------+-----------+
+#   |        |           | ytermusic |
+#   |  yazi  |  claude   +-----------+
+#   |        |           |  lazyvim  |
+#   +--------+-----------+-----------+
+# Enter a session: switch if we're a real tmux client, else attach.
+# Falls back to attach when $TMUX is stale (avoids "no current client").
+_setup_enter() {
+  local name="$1"
+  if [ -n "$TMUX" ] && tmux switch-client -t "$name" 2>/dev/null; then
+    return
+  fi
+  TMUX= tmux attach -t "$name"
+}
+
+setup() {
+  local name="${1:-x}"
+
+  if tmux has-session -t "$name" 2>/dev/null; then
+    _setup_enter "$name"
+    return
+  fi
+
+  tmux new-session -d -s "$name" -n dev
+  local left mid right br
+  left=$(tmux display-message -p -t "$name" '#{pane_id}')
+  mid=$(tmux split-window -h -l 78% -t "$left" -P -F '#{pane_id}')   # right region (78%), yazi keeps 22%
+  right=$(tmux split-window -h -l 40% -t "$mid" -P -F '#{pane_id}')  # right column (~31%), claude keeps middle
+  br=$(tmux split-window -v -l 50% -t "$right" -P -F '#{pane_id}')   # split right column top/bottom
+
+  tmux send-keys -t "$left"  'yazi' C-m
+  tmux send-keys -t "$mid"   'claude' C-m
+  tmux send-keys -t "$right" 'ytermusic' C-m
+  tmux send-keys -t "$br"    'nvim' C-m
+
+  tmux select-pane -t "$mid"
+  _setup_enter "$name"
+}
+
+# Hermes Agent — ensure ~/.local/bin is on PATH
+export PATH="$HOME/.local/bin:$PATH"
