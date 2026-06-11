@@ -45,6 +45,14 @@ if [[ -d "$SRC/config" ]]; then
   done
 fi
 
+# Ghostty also reads from ~/Library/Application Support/com.mitchellh.ghostty/config
+# on macOS. Mirror the symlink there so the GUI sees it too.
+if [[ -e "$SRC/config/ghostty/config" ]]; then
+  GHOSTTY_APP_SUPPORT="$HOME/Library/Application Support/com.mitchellh.ghostty"
+  mkdir -p "$GHOSTTY_APP_SUPPORT"
+  link "$SRC/config/ghostty/config" "$GHOSTTY_APP_SUPPORT/config"
+fi
+
 if [[ -z "$(ls -A "$BACKUP")" ]]; then
   rmdir "$BACKUP"
 else

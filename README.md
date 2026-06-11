@@ -18,7 +18,7 @@ Re-runnable. Re-running skips what's already installed and updates what's stale.
 | Status bar       | [Sketchybar](https://github.com/FelixKratz/SketchyBar) + [Borders](https://github.com/FelixKratz/JankyBorders) |
 | Glue / hotkeys   | [Hammerspoon](https://www.hammerspoon.org)                           |
 | Curator          | [Omachy](https://dough654.github.io/Omachy/) (Omakub-for-Mac)        |
-| Terminal         | [Ghostty](https://ghostty.org) + JetBrains Mono / Hack Nerd Font     |
+| Terminal         | [Ghostty](https://ghostty.org) (Catppuccin Mocha, JetBrains Mono 13, hidden titlebar) |
 | Shell            | zsh + [Starship](https://starship.rs) + [atuin](https://atuin.sh) + fzf + autosuggestions + syntax-highlighting |
 | Editor           | [Neovim](https://neovim.io) with [LazyVim](https://www.lazyvim.org)  |
 | File / git / docker TUIs | [yazi](https://yazi-rs.github.io), [lazygit](https://github.com/jesseduffield/lazygit), [lazydocker](https://github.com/jesseduffield/lazydocker) |
