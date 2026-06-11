@@ -6,9 +6,12 @@ set -euo pipefail
 # --- Keyboard ----------------------------------------------------------------
 # Function keys behave as F1-F12 by default (media keys via Fn).
 defaults write -g com.apple.keyboard.fnState -bool true
-# Fast key repeat
-defaults write -g KeyRepeat -int 2
-defaults write -g InitialKeyRepeat -int 15
+# Key repeat: moderate. KeyRepeat=2/InitialKeyRepeat=15 is "as fast as macOS
+# allows" and causes ghost double-presses on quick taps (Ctrl-C → "cc",
+# typing "setup" → "settup"). 6/25 is the sweet spot: snappier than the
+# macOS Settings slider's fastest, but won't double-fire.
+defaults write -g KeyRepeat -int 6
+defaults write -g InitialKeyRepeat -int 25
 # No press-and-hold accent popup
 defaults write -g ApplePressAndHoldEnabled -bool false
 # Kill autocorrect / smart quotes / smart dashes / auto-cap

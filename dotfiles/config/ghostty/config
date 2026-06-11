@@ -14,6 +14,11 @@ window-theme = dark
 macos-titlebar-style = hidden
 window-padding-balance = true
 
+# New windows start fresh — don't inherit cwd, font size, or other state
+# from the focused window.
+window-inherit-working-directory = false
+window-inherit-font-size = false
+
 # Cursor
 cursor-style = block
 cursor-style-blink = false
