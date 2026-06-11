@@ -38,8 +38,14 @@ local cheatsheetHtml = [[
     font-size: 11px; white-space: nowrap;
   }
   .desc { color: #a6adc8; text-align: right; padding-left: 14px; }
+  .signature {
+    margin-top: 18px; padding-top: 10px;
+    border-top: 1px solid rgba(205, 214, 244, 0.10);
+    text-align: center; font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #6c7086;
+  }
 </style></head><body>
-<h1>Omachy &middot; AeroSpace cheatsheet</h1>
+<h1>Corporate Man's Linux</h1>
 <div class="grid">
   <div class="col">
     <h2>Focus</h2>
@@ -128,13 +134,14 @@ local cheatsheetHtml = [[
     <div class="row"><span class="keys">␣ cm</span><span class="desc">Mason (LSP installer)</span></div>
   </div>
 </div>
+<div class="signature">Bawan A. Dawood</div>
 </body></html>
 ]]
 
 local function showCheatsheet()
   if cheatsheet then return end
   local screen = hs.screen.mainScreen():frame()
-  local w, h = 1320, 600
+  local w, h = 1320, 640
   local rect = hs.geometry.rect(
     screen.x + (screen.w - w) / 2,
     screen.y + (screen.h - h) / 2,

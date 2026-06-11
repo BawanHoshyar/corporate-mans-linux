@@ -158,6 +158,7 @@ cat <<'BANNER'
 
 ╔══════════════════════════════════════════════════════════════════════╗
 ║                              ALL DONE                                ║
+║              Corporate Man's Linux  ·  Bawan A. Dawood               ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
 Log out and back in (or reboot) to lock in:
@@ -165,5 +166,6 @@ Log out and back in (or reboot) to lock in:
   • chsh to brew zsh
   • Accessibility / Screen Recording grants
 
-Log: ~/.corporate-mans-linux.log
+Cheatsheet:  hold ⌘⌥/ once Hammerspoon is granted Accessibility.
+Log:         ~/.corporate-mans-linux.log
 BANNER
