@@ -1,3 +1,9 @@
+-- Enable `hs -c "..."` and `open hammerspoon://reload` so config reloads
+-- don't require quitting the menubar app.
+require("hs.ipc")
+hs.allowAppleScript(true)
+hs.urlevent.bind("reload", function() hs.reload() end)
+
 hs.hotkey.bind({"cmd"}, "t", function()
   hs.application.launchOrFocus("Ghostty")
 end)
