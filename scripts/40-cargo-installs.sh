@@ -9,7 +9,7 @@ command -v cargo >/dev/null || { echo "cargo missing — did brew install rust s
 # Source: https://github.com/BawanHoshyar/ytermusic
 if ! command -v ytermusic >/dev/null; then
   echo "Installing ytermusic from BawanHoshyar fork…"
-  cargo install --git https://github.com/BawanHoshyar/ytermusic --bin ytermusic
+  cargo install --git https://github.com/BawanHoshyar/ytermusic --branch bawan/custom --bin ytermusic
 else
   echo "ytermusic already installed at $(command -v ytermusic) — skipping (run \`cargo install --git ... --force\` to refresh)"
 fi
