@@ -51,21 +51,26 @@ GUI casks: aerospace, claude-code, ghostty, hammerspoon, ollama-app, postman, pl
 
 ---
 
-## The `dev` command — one-shot project workflow
+## The `setup` command — one-shot workspace
 
-`dev [path]` (defaults to the current directory) opens a full tmux session for the project in one keystroke. If the session already exists, it reattaches instead of clobbering it. Session name is derived from the directory basename, so each project gets its own.
+`setup [name]` (defaults to `x`) drops you into a tmux session with the four tools I always want open, laid out in a single window:
 
-Windows it creates:
+```
++--------+-----------+-----------+
+|        |           | ytermusic |
+|  yazi  |  claude   +-----------+
+|        |           |   nvim    |
++--------+-----------+-----------+
+```
 
-| Window | Runs |
-| ------ | ---- |
-| `nvim` | `nvim .` (LazyVim on the project root) |
-| `opencode` | `opencode` (local-LLM coding agent) |
-| `git` | `lazygit` (TUI git) |
-| `server` | empty shell — for `npm run dev`, `cargo run`, etc. |
-| `scratch` | empty shell — for one-off commands |
+- **left (~22%)** — `yazi` (file manager)
+- **middle (~47%)** — `claude` (Claude Code)
+- **right (~31%), top** — `ytermusic` (music)
+- **right (~31%), bottom** — `nvim`
 
-Lives at `~/.config/omachy/dev-session.sh`, symlinked from `dotfiles/config/omachy/dev-session.sh`. Exposed as a `dev()` shell function in `dotfiles/zshrc`. Press `⌘⌥/` in Hammerspoon to see this and every other shortcut on one screen.
+If a session with that name already exists it reattaches (or `switch-client`s if you're already inside tmux) instead of recreating panes — so `setup` is safe to run repeatedly, and `setup work`, `setup repo-a`, etc. give you parallel workspaces you can flip between.
+
+Defined as a `setup()` shell function in `dotfiles/zshrc`. Press `⌘⌥/` in Hammerspoon to see this and every other shortcut on one screen.
 
 ---
 
