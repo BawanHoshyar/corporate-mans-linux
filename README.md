@@ -8,6 +8,27 @@ bash <(curl -fsSL https://raw.githubusercontent.com/BawanHoshyar/corporate-mans-
 
 Re-runnable. Re-running skips what's already installed and updates what's stale.
 
+### Undo
+
+One command to reverse everything and put the Mac back the way it was:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/BawanHoshyar/corporate-mans-linux/main/uninstall.sh)
+```
+
+Walks the setup in reverse: stops services, uninstalls every formula/cask/tap in the Brewfile, removes ytermusic, deletes the four Ollama models, blows away `~/.hermes` and the tmux plugins, deletes every `defaults write` key, then restores the most recent `~/.dotfiles-backup-*` into place. Confirms before each destructive step (use `--yes` to skip prompts, `--dry-run` to preview).
+
+Kept by default — pass `--nuke` to remove these too:
+
+- **Homebrew itself** (may have pre-existed)
+- **gh / atuin auth** and `~/.local/share/atuin`
+
+Never auto-removed (do it yourself if you want a truly clean Mac):
+
+- **Xcode Command Line Tools** — too disruptive to yank; lots of other dev tools need them
+- **`~/.ssh`** — your keys
+- **Accessibility / Screen Recording grants** — revoke under System Settings → Privacy & Security
+
 ---
 
 ## What you get
