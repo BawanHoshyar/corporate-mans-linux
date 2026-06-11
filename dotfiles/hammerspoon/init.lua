@@ -88,6 +88,8 @@ local cheatsheetHtml = [[
     <div class="row"><span class="keys">⌘ ⌥ /</span><span class="desc">hold to show this</span></div>
   </div>
   <div class="col">
+    <h2>Shell</h2>
+    <div class="row"><span class="keys">dev [path]</span><span class="desc">tmux dev session (nvim/opencode/lazygit)</span></div>
     <h2>tmux &middot; prefix ⌃b</h2>
     <div class="row"><span class="keys">⌃b ?</span><span class="desc">list all bindings</span></div>
     <div class="row"><span class="keys">⌃b d</span><span class="desc">detach session</span></div>

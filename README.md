@@ -51,6 +51,24 @@ GUI casks: aerospace, claude-code, ghostty, hammerspoon, ollama-app, postman, pl
 
 ---
 
+## The `dev` command — one-shot project workflow
+
+`dev [path]` (defaults to the current directory) opens a full tmux session for the project in one keystroke. If the session already exists, it reattaches instead of clobbering it. Session name is derived from the directory basename, so each project gets its own.
+
+Windows it creates:
+
+| Window | Runs |
+| ------ | ---- |
+| `nvim` | `nvim .` (LazyVim on the project root) |
+| `opencode` | `opencode` (local-LLM coding agent) |
+| `git` | `lazygit` (TUI git) |
+| `server` | empty shell — for `npm run dev`, `cargo run`, etc. |
+| `scratch` | empty shell — for one-off commands |
+
+Lives at `~/.config/omachy/dev-session.sh`, symlinked from `dotfiles/config/omachy/dev-session.sh`. Exposed as a `dev()` shell function in `dotfiles/zshrc`. Press `⌘⌥/` in Hammerspoon to see this and every other shortcut on one screen.
+
+---
+
 ## Opinionated choices, explained
 
 ### Why AeroSpace and not yabai?
