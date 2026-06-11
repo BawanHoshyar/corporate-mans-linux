@@ -89,7 +89,7 @@ local cheatsheetHtml = [[
   </div>
   <div class="col">
     <h2>Shell</h2>
-    <div class="row"><span class="keys">setup [name]</span><span class="desc">4-pane workspace: yazi · claude · ytermusic/nvim</span></div>
+    <div class="row"><span class="keys">setup</span><span class="desc">4-pane workspace: yazi · claude · ytermusic/nvim</span></div>
     <h2>tmux &middot; prefix ⌃b</h2>
     <div class="row"><span class="keys">⌃b ?</span><span class="desc">list all bindings</span></div>
     <div class="row"><span class="keys">⌃b d</span><span class="desc">detach session</span></div>

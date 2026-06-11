@@ -53,7 +53,7 @@ GUI casks: aerospace, claude-code, ghostty, hammerspoon, ollama-app, postman, pl
 
 ## The `setup` command — one-shot workspace
 
-`setup [name]` (defaults to `x`) drops you into a tmux session with the four tools I always want open, laid out in a single window:
+Type `setup` and you're dropped into a tmux session (named `x`) with the four tools I always want open, laid out in a single window:
 
 ```
 +--------+-----------+-----------+
@@ -68,7 +68,7 @@ GUI casks: aerospace, claude-code, ghostty, hammerspoon, ollama-app, postman, pl
 - **right (~31%), top** — `ytermusic` (music)
 - **right (~31%), bottom** — `nvim`
 
-If a session with that name already exists it reattaches (or `switch-client`s if you're already inside tmux) instead of recreating panes — so `setup` is safe to run repeatedly, and `setup work`, `setup repo-a`, etc. give you parallel workspaces you can flip between.
+Re-running `setup` reattaches the existing `x` session instead of rebuilding the panes, so it's safe to run from anywhere. (Pass a different name — `setup foo` — if you ever want a second workspace alongside it.)
 
 Defined as a `setup()` shell function in `dotfiles/zshrc`. Press `⌘⌥/` in Hammerspoon to see this and every other shortcut on one screen.
 
