@@ -15,8 +15,8 @@ fi
 tmux new-session -s "$session" -n "nvim" -c "$dir" -d
 tmux send-keys -t "$session:nvim" "nvim ." Enter
 
-tmux new-window -t "$session" -n "claude" -c "$dir"
-tmux send-keys -t "$session:claude" "claude" Enter
+tmux new-window -t "$session" -n "opencode" -c "$dir"
+tmux send-keys -t "$session:opencode" "opencode" Enter
 
 tmux new-window -t "$session" -n "git" -c "$dir"
 tmux send-keys -t "$session:git" "lazygit" Enter

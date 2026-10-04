@@ -20,6 +20,7 @@ brew "lazygit"
 brew "mas"
 brew "neovim"
 brew "node"
+brew "opencode"
 brew "pandoc"
 brew "poppler"
 brew "postgresql@16", restart_service: :changed

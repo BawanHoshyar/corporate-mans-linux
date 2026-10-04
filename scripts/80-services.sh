@@ -15,3 +15,8 @@ open -a Ghostty     2>/dev/null || true
 
 # Custom screensaver (Ctrl+Cmd+Q in Hammerspoon launches it).
 bash "$REPO_DIR/screensaver/install.sh" || true
+
+# Rehydrate the opencode plugin deps (vendored package.json, gitignored node_modules).
+if [[ -f "$HOME/.config/opencode/package.json" ]]; then
+  ( cd "$HOME/.config/opencode" && npm install --silent ) || true
+fi

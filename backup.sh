@@ -18,7 +18,9 @@ ITEMS=(
   Desktop Documents Downloads Pictures Movies Music
   .claude .claude.json
   .ssh .gitconfig .config/gh .config/gcloud
-  .zsh_history .local/share/atuin
+  .zsh_history .local/share/atuin .local/share/opencode
+  'Library/Application Support/obsidian/obsidian.json'
+  'Library/Application Support/obsidian/f7a415d44e7bed09.json'
   .grok .vibehost .vibehost-template .mitmproxy .docker/config.json
   Library/LaunchAgents/com.bawan.aerospace-heal.plist
   Library/LaunchAgents/com.bawan.topvendors.refresh.plist
@@ -30,6 +32,7 @@ EXCLUDES=(
   '*/android/build' '*/android/app/build' '*/.dart_tool'
   '.claude/cache' '.claude/paste-cache' '.claude/shell-snapshots'
   '.claude/session-env' '.claude/telemetry' '.claude/downloads'
+  '.local/share/opencode/log' '.local/share/opencode/tool-output'
 )
 
 cd "$HOME"

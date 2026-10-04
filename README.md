@@ -14,7 +14,8 @@ The public repo holds the *tooling*. Your *personal stuff* goes in one private a
 
 ```bash
 # 1. On the OLD Mac — pack projects, ~/.claude (settings, memory, skills, plugins,
-#    history), ~/.claude.json, ~/.ssh, git/gh/gcloud auth, shell history, Desktop,
+#    history), ~/.claude.json, the Obsidian vault (second_brain) + vault registry,
+#    OpenCode sessions, ~/.ssh, git/gh/gcloud auth, shell history, Desktop,
 #    Downloads, etc. Python venvs are frozen to requirements, not copied.
 bash ~/code/corporate-mans-linux/backup.sh /Volumes/USB     # or any folder
 # → copy cml-backup-YYYYMMDD-HHMMSS.tar.gz somewhere OFF the Mac
@@ -60,7 +61,7 @@ Never auto-removed (do it yourself if you want a truly clean Mac):
 | Shell            | zsh + [Starship](https://starship.rs) + [atuin](https://atuin.sh) + fzf + autosuggestions + syntax-highlighting |
 | Editor           | [Neovim](https://neovim.io) with [LazyVim](https://www.lazyvim.org)  |
 | File / git / docker TUIs | [yazi](https://yazi-rs.github.io), [lazygit](https://github.com/jesseduffield/lazygit), [lazydocker](https://github.com/jesseduffield/lazydocker) |
-| Agents           | [Claude Code](https://claude.com/claude-code) (native install) + [herdr](https://herdr.dev) agent multiplexer |
+| Agents           | [Claude Code](https://claude.com/claude-code) (native install) + [OpenCode](https://opencode.ai) + [herdr](https://herdr.dev) agent multiplexer |
 | Music            | [ytermusic](https://github.com/BawanHoshyar/ytermusic) — my fork    |
 | Bonus            | atuin, fastfetch, ffmpeg, fzf, gh, go, rust, tmux, uv, yt-dlp        |
 
