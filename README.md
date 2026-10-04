@@ -14,7 +14,7 @@ The public repo holds the *tooling*. Your *personal stuff* goes in one private a
 
 ```bash
 # 1. On the OLD Mac — pack projects, ~/.claude (settings, memory, skills, plugins,
-#    history), ~/.claude.json, the Obsidian vault (second_brain) + vault registry,
+#    history), ~/.claude.json, Claude desktop app config/extensions/sessions, the Obsidian vault (second_brain) + vault registry,
 #    OpenCode sessions, ~/.ssh, git/gh/gcloud auth, shell history, Desktop,
 #    Downloads, etc. Python venvs are frozen to requirements, not copied.
 bash ~/code/corporate-mans-linux/backup.sh /Volumes/USB     # or any folder

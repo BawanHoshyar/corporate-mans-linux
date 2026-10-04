@@ -19,6 +19,7 @@ ITEMS=(
   .claude .claude.json
   .ssh .gitconfig .config/gh .config/gcloud
   .zsh_history .local/share/atuin .local/share/opencode
+  'Library/Application Support/Claude'
   'Library/Application Support/obsidian/obsidian.json'
   'Library/Application Support/obsidian/f7a415d44e7bed09.json'
   .grok .vibehost .vibehost-template .mitmproxy .docker/config.json
@@ -32,6 +33,8 @@ EXCLUDES=(
   '*/android/build' '*/android/app/build' '*/.dart_tool'
   '.claude/cache' '.claude/paste-cache' '.claude/shell-snapshots'
   '.claude/session-env' '.claude/telemetry' '.claude/downloads'
+  'Library/Application Support/Claude/vm_bundles' 'Library/Application Support/Claude/claude-code-vm' 'Library/Application Support/Claude/claude-code' 'Library/Application Support/Claude/Cache' 'Library/Application Support/Claude/Code Cache' 'Library/Application Support/Claude/GPUCache'
+  'Library/Application Support/Claude/DawnGraphiteCache' 'Library/Application Support/Claude/DawnWebGPUCache' 'Library/Application Support/Claude/Crashpad' 'Library/Application Support/Claude/Singleton*'
   '.local/share/opencode/log' '.local/share/opencode/tool-output'
 )
 
