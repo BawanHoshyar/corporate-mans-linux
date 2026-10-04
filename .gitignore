@@ -4,3 +4,7 @@ node_modules/
 *.session
 *.history
 package-lock.json
+screensaver/build/
+dotfiles/config/herdr/*
+!dotfiles/config/herdr/config.toml
+dotfiles/config/aerospace/heal.log

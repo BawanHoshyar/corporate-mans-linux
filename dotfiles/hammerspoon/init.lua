@@ -86,6 +86,7 @@ local cheatsheetHtml = [[
     <h2>Hammerspoon</h2>
     <div class="row"><span class="keys">⌘ t</span><span class="desc">launch Ghostty</span></div>
     <div class="row"><span class="keys">⌘ ⌥ /</span><span class="desc">hold to show this</span></div>
+    <div class="row"><span class="keys">⌃ ⌘ q</span><span class="desc">lock → screensaver</span></div>
   </div>
   <div class="col">
     <h2>Shell</h2>
@@ -172,3 +173,21 @@ local function hideCheatsheet()
 end
 
 hs.hotkey.bind({"cmd", "alt"}, "/", showCheatsheet, hideCheatsheet)
+
+-- ── Ctrl+Cmd+Q → start screensaver instead of the lock window ───────────────
+-- Uses an eventtap so we win the race against macOS's reserved Lock Screen
+-- shortcut: intercept the keydown, swallow it, and launch the screensaver.
+-- NOTE: hs.caffeinate.startScreensaver() is a no-op on macOS Tahoe (26); launch
+-- ScreenSaverEngine directly instead. It locks too when System Settings → Lock
+-- Screen → "Require password after screen saver begins" is set to Immediately.
+-- Global (not local) so the tap is never garbage-collected.
+screensaverTap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(e)
+  local f = e:getFlags()
+  if e:getKeyCode() == hs.keycodes.map["q"]
+     and f.cmd and f.ctrl and not f.alt and not f.shift then
+    hs.task.new("/usr/bin/open", nil, { "-a", "ScreenSaverEngine" }):start()
+    return true  -- swallow so macOS's own Lock Screen doesn't also fire
+  end
+  return false
+end)
+screensaverTap:start()

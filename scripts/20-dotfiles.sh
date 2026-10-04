@@ -26,7 +26,7 @@ link() {
 }
 
 # Top-level home files
-for f in zshrc zprofile tmux.conf; do
+for f in zshrc zprofile zshenv tmux.conf; do
   [[ -e "$SRC/$f" ]] && link "$SRC/$f" "$HOME/.$f"
 done
 

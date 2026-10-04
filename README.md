@@ -8,6 +8,23 @@ bash <(curl -fsSL https://raw.githubusercontent.com/BawanHoshyar/corporate-mans-
 
 Re-runnable. Re-running skips what's already installed and updates what's stale.
 
+### Moving to a new / wiped Mac (keeps projects, Claude setup, keys)
+
+The public repo holds the *tooling*. Your *personal stuff* goes in one private archive:
+
+```bash
+# 1. On the OLD Mac — pack projects, ~/.claude (settings, memory, skills, plugins,
+#    history), ~/.claude.json, ~/.ssh, git/gh/gcloud auth, shell history, Desktop,
+#    Downloads, etc. Python venvs are frozen to requirements, not copied.
+bash ~/code/corporate-mans-linux/backup.sh /Volumes/USB     # or any folder
+# → copy cml-backup-YYYYMMDD-HHMMSS.tar.gz somewhere OFF the Mac
+
+# 2. On the NEW Mac — one command does tooling + restore + rebuilds venvs/node_modules
+bash <(curl -fsSL https://raw.githubusercontent.com/BawanHoshyar/corporate-mans-linux/main/setup.sh) --restore /Volumes/USB/cml-backup-....tar.gz
+```
+
+Without `--restore`, setup looks for the newest `cml-backup-*.tar.gz` on any mounted drive, in `~/Downloads`, or in `~`. Edit the `ITEMS` list at the top of `backup.sh` to change what gets packed. **Never commit the archive** — it has your keys.
+
 ### Undo
 
 One command to reverse everything and put the Mac back the way it was:
@@ -16,7 +33,7 @@ One command to reverse everything and put the Mac back the way it was:
 bash <(curl -fsSL https://raw.githubusercontent.com/BawanHoshyar/corporate-mans-linux/main/uninstall.sh)
 ```
 
-Walks the setup in reverse: stops services, uninstalls every formula/cask/tap in the Brewfile, removes ytermusic, deletes the four Ollama models, blows away `~/.hermes` and the tmux plugins, deletes every `defaults write` key, then restores the most recent `~/.dotfiles-backup-*` into place. Confirms before each destructive step (use `--yes` to skip prompts, `--dry-run` to preview).
+Walks the setup in reverse: stops services, uninstalls every formula/cask/tap in the Brewfile, removes ytermusic, blows away the tmux plugins, deletes every `defaults write` key, then restores the most recent `~/.dotfiles-backup-*` into place. Confirms before each destructive step (use `--yes` to skip prompts, `--dry-run` to preview).
 
 Kept by default — pass `--nuke` to remove these too:
 
@@ -43,11 +60,11 @@ Never auto-removed (do it yourself if you want a truly clean Mac):
 | Shell            | zsh + [Starship](https://starship.rs) + [atuin](https://atuin.sh) + fzf + autosuggestions + syntax-highlighting |
 | Editor           | [Neovim](https://neovim.io) with [LazyVim](https://www.lazyvim.org)  |
 | File / git / docker TUIs | [yazi](https://yazi-rs.github.io), [lazygit](https://github.com/jesseduffield/lazygit), [lazydocker](https://github.com/jesseduffield/lazydocker) |
-| Local agents     | [Ollama](https://ollama.com) + [OpenCode](https://opencode.ai) + [Hermes](https://github.com/NousResearch/hermes-agent) |
+| Agents           | [Claude Code](https://claude.com/claude-code) (native install) + [herdr](https://herdr.dev) agent multiplexer |
 | Music            | [ytermusic](https://github.com/BawanHoshyar/ytermusic) — my fork    |
 | Bonus            | atuin, fastfetch, ffmpeg, fzf, gh, go, rust, tmux, uv, yt-dlp        |
 
-GUI casks: aerospace, claude-code, ghostty, hammerspoon, ollama-app, postman, plus the two Nerd Fonts.
+GUI casks: aerospace, android-studio, claude, gcloud-cli, ghostty, google-chrome, grok-build, hammerspoon, mitmproxy, obsidian, postman, visual-studio-code, plus the two Nerd Fonts. App Store apps (Slack, Office, iWork) via `mas`. Dev runtimes: node, rbenv + Ruby 3.4.10, uv + Python, Go, Rust, postgresql@16, colima + docker.
 
 ---
 
@@ -112,7 +129,7 @@ I live in Neovim. The only GUI I sign into manually is Postman. If you want VS C
 
 ### Why no encrypted secrets?
 
-This repo is public so other people can use it. Anyone forking should bring their own ssh keys, atuin sync key, GitHub auth, Claude login, Hermes config. The script prints a manual TODO list of every credential to set up.
+This repo is public so other people can use it. Anyone forking should bring their own ssh keys, atuin sync key, GitHub auth, Claude login — or use `backup.sh` above for your own. The script prints a manual TODO list of every credential to set up.
 
 ---
 
@@ -137,7 +154,6 @@ If you re-export, replace the same file — ytermusic re-reads it on launch.
 ## What's NOT in this repo
 
 - `~/.ssh`, atuin login key, zsh history, browser sessions — bring your own.
-- `~/.hermes/config.yaml` — has API keys + machine-specific paths. Sample at `~/.hermes/config.yaml.example` after `60-hermes.sh` runs.
 - Corporate apps (FortiClient, Okta Verify, SentinelOne, Cloudflare WARP, etc.) — IT pushes these via MDM on a work Mac. Trying to brew-install them collides.
 - Microsoft Office, Apple iWork — work license, not portable.
 - VS Code extensions and Chrome bookmarks — use the native sync.
@@ -148,19 +164,16 @@ If you re-export, replace the same file — ytermusic re-reads it on launch.
 
 The last script, `99-post-install.sh`, is **interactive** — it walks you through every step the OS won't let us automate, runs what it can, and pauses where it must. Steps:
 
-1. **Login shell:** `chsh -s` to brew's zsh (asks for your password).
-2. **SSH key:** prompts for an email, generates ed25519, adds to keychain.
-3. **gh auth login:** opens browser, you paste the one-time code.
-4. **Uploads the pubkey** to GitHub via `gh ssh-key add` — no manual paste.
-5. **Atuin:** offers register / login / skip.
-6. **Permissions:** opens the System Settings panels for Accessibility and Screen Recording — you click the toggles for AeroSpace, Hammerspoon, Sketchybar and press ENTER.
-7. **Claude Code:** opens the app so you can run `/login`.
-8. **Ghostty:** opens it so you can pick "Make Default Terminal".
-9. **Hermes config:** copies the example into place, optionally opens in `$EDITOR`.
-10. **ytermusic cookie:** points you at the README section below; confirms the file exists.
-11. **Extra Ollama models:** prompts for any model name beyond the four defaults.
+1. **SSH key:** prompts for an email, generates ed25519, adds to keychain.
+2. **gh auth login:** opens browser, you paste the one-time code.
+3. **Uploads the pubkey** to GitHub via `gh ssh-key add` — no manual paste.
+4. **Atuin:** offers register / login / skip.
+5. **Permissions:** opens the System Settings panels for Accessibility and Screen Recording — you click the toggles for AeroSpace, Hammerspoon, Sketchybar and press ENTER.
+6. **Claude Code:** opens the app so you can run `/login`.
+7. **Ghostty:** opens it so you can pick "Make Default Terminal".
+8. **ytermusic cookie:** points you at the README section below; confirms the file exists.
 
-After that, **log out + log back in** (or reboot) so Fn-keys, `chsh`, and Accessibility grants settle.
+After that, **log out + log back in** (or reboot) so Fn-keys and Accessibility grants settle.
 
 ---
 
@@ -184,17 +197,17 @@ bash <(curl -fsSL https://raw.githubusercontent.com/BawanHoshyar/corporate-mans-
 .
 ├── README.md
 ├── setup.sh              # one entry point, sources scripts/ in order
+├── backup.sh             # packs personal data into a private archive
 ├── Brewfile              # brew bundle manifest
 ├── scripts/
 │   ├── 00-preflight.sh   # xcode CLT + brew
 │   ├── 10-brew-bundle.sh # everything in Brewfile
+│   ├── 15-restore-backup.sh   # unpacks backup.sh archive, rebuilds venvs/node_modules
 │   ├── 20-dotfiles.sh    # symlink with timestamped backup of anything replaced
 │   ├── 30-macos-defaults.sh
-│   ├── 40-cargo-installs.sh   # ytermusic from BawanHoshyar fork
-│   ├── 50-ollama-models.sh    # pulls 4 default models
-│   ├── 60-hermes.sh           # clones NousResearch/hermes-agent
+│   ├── 40-tools.sh       # ytermusic fork, Claude Code, Ruby, uv tools
 │   ├── 70-tmux-tpm.sh
-│   ├── 80-services.sh
+│   ├── 80-services.sh    # brew services, launch GUI apps, screensaver
 │   └── 99-post-install.sh
 └── dotfiles/             # the actual configs, symlinked into $HOME
 ```

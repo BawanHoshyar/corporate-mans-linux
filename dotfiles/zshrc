@@ -2,9 +2,12 @@
 # Disable Claude experimental betas
 export CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1
 
-# Auto-start tmux
+# Auto-start tmux — each window gets its own independent session.
+# `new-session` (no -A, no fixed name) always creates a fresh session, so
+# windows never mirror each other. `exec` replaces zsh with tmux, so exiting
+# tmux closes the window instead of dropping to a bare shell.
 if command -v tmux &>/dev/null && [ -z "$TMUX" ]; then
-  tmux new-session -A -s main
+  exec tmux new-session
 fi
 
 # ── Omachy managed (do not edit between these markers) ──
@@ -59,5 +62,6 @@ setup() {
   _setup_enter "$name"
 }
 
-# Hermes Agent — ensure ~/.local/bin is on PATH
-export PATH="$HOME/.local/bin:$PATH"
+
+# Local bins: claude (native installer), uv tools, cargo installs
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"

@@ -4,11 +4,8 @@
 #
 # What it does (in reverse of setup.sh):
 #   99 ← chsh back to /bin/zsh (optional)
-#   80 ← stop sketchybar/borders, quit AeroSpace/Hammerspoon/Ghostty,
-#        rm ~/.config/opencode/node_modules
+#   80 ← stop sketchybar/borders, quit AeroSpace/Hammerspoon/Ghostty
 #   70 ← rm ~/.tmux/plugins/tpm and ~/.tmux/plugins (if empty)
-#   60 ← rm -rf ~/.hermes
-#   50 ← ollama rm each model installed by 50-ollama-models.sh
 #   40 ← cargo uninstall ytermusic
 #   30 ← defaults delete every key written by 30-macos-defaults.sh
 #   20 ← remove symlinks pointing into the install dir, restore the
@@ -67,8 +64,7 @@ if [[ $DRY -eq 0 ]] && [[ $YES -eq 0 ]]; then
 This will uninstall everything corporate-mans-linux installed:
   • All brew formulae + casks in the Brewfile
   • ytermusic (cargo)
-  • Ollama models: hermes3, qwen2.5-coder, gpt-oss-abliterated, whiterabbitneo
-  • ~/.hermes, ~/.tmux/plugins/tpm
+  • ~/.tmux/plugins/tpm
   • Dotfile symlinks  (originals restored from ~/.dotfiles-backup-*/)
   • macOS defaults this setup wrote
 $( [[ $NUKE -eq 1 ]] && echo "  • Homebrew itself, gh auth, atuin account  (--nuke)" )
@@ -119,12 +115,9 @@ if command -v brew >/dev/null; then
     do_ "brew services stop $s 2>/dev/null || true"
   done
 fi
-for app in AeroSpace Hammerspoon Ghostty Sketchybar Borders Ollama; do
+for app in AeroSpace Hammerspoon Ghostty Sketchybar Borders; do
   do_ "osascript -e 'quit app \"$app\"' 2>/dev/null || true"
 done
-if [[ -d "$HOME/.config/opencode/node_modules" ]]; then
-  do_ "rm -rf '$HOME/.config/opencode/node_modules'"
-fi
 
 # --- 70 ← tmux tpm ---------------------------------------------------------
 log "70 ← tmux plugin manager"
@@ -133,24 +126,6 @@ if [[ -d "$HOME/.tmux/plugins/tpm" ]]; then
   do_ "rmdir '$HOME/.tmux/plugins' 2>/dev/null || true"
   do_ "rmdir '$HOME/.tmux' 2>/dev/null || true"
 else skip "no tpm dir"; fi
-
-# --- 60 ← hermes -----------------------------------------------------------
-log "60 ← Hermes"
-if [[ -d "$HOME/.hermes" ]]; then
-  if [[ -f "$HOME/.hermes/config.yaml" ]] && ! ask "Delete ~/.hermes (includes config.yaml with API keys)?"; then
-    skip "kept ~/.hermes"
-  else
-    do_ "rm -rf '$HOME/.hermes'"
-  fi
-else skip "no ~/.hermes"; fi
-
-# --- 50 ← ollama models ----------------------------------------------------
-log "50 ← Ollama models"
-if command -v ollama >/dev/null; then
-  for m in hermes3 qwen2.5-coder huihui_ai/gpt-oss-20b-abliterated whiterabbitneo/whiterabbitneo; do
-    do_ "ollama rm '$m' 2>/dev/null || true"
-  done
-else skip "ollama CLI not on PATH (will be removed with cask anyway)"; fi
 
 # --- 40 ← cargo installs ---------------------------------------------------
 log "40 ← Cargo-installed tools"

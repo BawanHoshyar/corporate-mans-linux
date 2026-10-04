@@ -9,20 +9,24 @@ INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/share/corporate-mans-linux}"
 LOG="$HOME/.corporate-mans-linux.log"
 DRY_RUN=0
 
-for arg in "$@"; do
-  case "$arg" in
+while [[ $# -gt 0 ]]; do
+  case "$1" in
     --dry-run) DRY_RUN=1 ;;
+    --restore) export CML_BACKUP="$(cd "$(dirname "$2")" && pwd)/$(basename "$2")"; shift ;;
     -h|--help)
       cat <<EOF
-Usage: setup.sh [--dry-run]
+Usage: setup.sh [--restore cml-backup-XXXX.tar.gz] [--dry-run]
 
 Bootstraps a Mac to match the corporate-mans-linux dotfiles + tooling setup.
 
-  --dry-run   Print what would happen without touching the system.
+  --restore F  Restore the private archive made by backup.sh (projects,
+               ~/.claude, ssh, auth). Auto-detected on /Volumes/*, ~/Downloads, ~.
+  --dry-run    Print what would happen without touching the system.
 EOF
       exit 0
       ;;
   esac
+  shift
 done
 
 log() { printf '\n\033[1;36m==>\033[0m %s\n' "$*" | tee -a "$LOG"; }
@@ -61,7 +65,7 @@ if [[ -z "$SCRIPT_DIR" || ! -d "$SCRIPT_DIR/scripts" ]]; then
   else
     git -C "$INSTALL_DIR" pull --ff-only
   fi
-  exec bash "$INSTALL_DIR/setup.sh" "$@"
+  exec bash "$INSTALL_DIR/setup.sh"
 fi
 
 cd "$SCRIPT_DIR"
@@ -74,6 +78,9 @@ run() {
     return
   fi
   log "Running $(basename "$script")"
+  # Each script is its own process; keep brew + user bins on PATH for all.
+  [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+  export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/.rbenv/shims:$PATH"
   # 99-post-install is interactive — don't pipe through tee or it'll
   # buffer prompts and break `read`. Other scripts can stream to the log.
   if [[ "$(basename "$script")" == 99-* ]]; then
