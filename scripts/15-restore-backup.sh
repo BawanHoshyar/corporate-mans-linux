@@ -1,22 +1,28 @@
 #!/usr/bin/env bash
-# Restore the private archive made by backup.sh (projects, ~/.claude, ssh,
-# git/gh auth, history, LaunchAgents). Uses $CML_BACKUP (setup.sh --restore),
-# else the newest cml-backup-*.tar.gz on a mounted volume, ~/Downloads or ~.
+# Pull the encrypted backup made by backup.sh from the private GitHub repo,
+# decrypt it with your passphrase, unpack into $HOME (projects, ~/.claude,
+# ssh, auth, Obsidian, ...), then rebuild venvs/node_modules.
 set -uo pipefail
 
-ARCHIVE="${CML_BACKUP:-}"
-if [[ -z "$ARCHIVE" ]]; then
-  ARCHIVE="$(ls -t /Volumes/*/cml-backup-*.tar.gz "$HOME"/Downloads/cml-backup-*.tar.gz \
-    "$HOME"/cml-backup-*.tar.gz 2>/dev/null | head -1)"
-fi
-if [[ -z "$ARCHIVE" || ! -f "$ARCHIVE" ]]; then
-  echo "[warn] No backup archive found — skipping restore. Re-run later with:"
-  echo "       CML_BACKUP=/path/to/cml-backup-....tar.gz bash $0"
-  exit 0
-fi
+BACKUP_REPO="${CML_BACKUP_REPO:-BawanDawood/mac-backup}"
+read -rp "$(printf '\033[1;35m? Restore your backup from github.com/%s? [Y/n] \033[0m' "$BACKUP_REPO")" reply </dev/tty
+case "${reply:-y}" in n|N|no|No) echo "Skipping restore."; exit 0 ;; esac
 
-echo "Restoring $ARCHIVE → $HOME"
-tar -xzpf "$ARCHIVE" -C "$HOME"
+if ! gh auth status &>/dev/null; then
+  echo "Log into GitHub as ${BACKUP_REPO%%/*} (the account that owns the backup):"
+  gh auth login --hostname github.com --git-protocol https --web </dev/tty
+fi
+gh auth setup-git
+
+WORK="$(mktemp -d)"; trap 'rm -rf "$WORK"' EXIT
+git clone --depth 1 -q "https://github.com/$BACKUP_REPO.git" "$WORK/repo" || { echo "[err] clone failed"; exit 1; }
+
+echo "Decrypting — enter your backup passphrase:"
+until cat "$WORK"/repo/backup.tgz.enc.part-* \
+  | /usr/bin/openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 \
+  | tar -xzpf - -C "$HOME"; do
+  echo "[warn] wrong passphrase or corrupt download — try again (Ctrl-C to skip)"
+done
 chmod 700 "$HOME/.ssh" 2>/dev/null && chmod 600 "$HOME"/.ssh/id_* 2>/dev/null
 chmod 644 "$HOME"/.ssh/*.pub 2>/dev/null || true
 

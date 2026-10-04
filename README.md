@@ -10,21 +10,21 @@ Re-runnable. Re-running skips what's already installed and updates what's stale.
 
 ### Moving to a new / wiped Mac (keeps projects, Claude setup, keys)
 
-The public repo holds the *tooling*. Your *personal stuff* goes in one private archive:
+The public repo holds the *tooling*. Your *personal stuff* is backed up, encrypted, to a private GitHub repo (`BawanDawood/mac-backup`):
 
 ```bash
-# 1. On the OLD Mac — pack projects, ~/.claude (settings, memory, skills, plugins,
-#    history), ~/.claude.json, Claude desktop app config/extensions/sessions, the Obsidian vault (second_brain) + vault registry,
-#    OpenCode sessions, ~/.ssh, git/gh/gcloud auth, shell history, Desktop,
-#    Downloads, etc. Python venvs are frozen to requirements, not copied.
-bash ~/code/corporate-mans-linux/backup.sh /Volumes/USB     # or any folder
-# → copy cml-backup-YYYYMMDD-HHMMSS.tar.gz somewhere OFF the Mac
+# 1. On the OLD Mac — packs projects, ~/.claude + ~/.claude.json, Claude desktop app
+#    config, Obsidian vault + registry, OpenCode sessions, ~/.ssh, git/gh/gcloud auth,
+#    shell history, Desktop/Downloads/etc. Encrypts with your passphrase (AES-256)
+#    and force-pushes it as one fresh commit (old backups are replaced).
+bash ~/code/corporate-mans-linux/backup.sh
 
-# 2. On the NEW Mac — one command does tooling + restore + rebuilds venvs/node_modules
-bash <(curl -fsSL https://raw.githubusercontent.com/BawanHoshyar/corporate-mans-linux/main/setup.sh) --restore /Volumes/USB/cml-backup-....tar.gz
+# 2. On the NEW Mac — the normal one-liner. Step 15 logs into GitHub, pulls the
+#    backup, asks for the passphrase, restores, and rebuilds venvs/node_modules.
+bash <(curl -fsSL https://raw.githubusercontent.com/BawanHoshyar/corporate-mans-linux/main/setup.sh)
 ```
 
-Without `--restore`, setup looks for the newest `cml-backup-*.tar.gz` on any mounted drive, in `~/Downloads`, or in `~`. Edit the `ITEMS` list at the top of `backup.sh` to change what gets packed. **Never commit the archive** — it has your keys.
+Edit the `ITEMS` list at the top of `backup.sh` to change what gets packed. Lose the passphrase = lose the backup.
 
 ### Undo
 
@@ -198,12 +198,12 @@ bash <(curl -fsSL https://raw.githubusercontent.com/BawanHoshyar/corporate-mans-
 .
 ├── README.md
 ├── setup.sh              # one entry point, sources scripts/ in order
-├── backup.sh             # packs personal data into a private archive
+├── backup.sh             # encrypted backup of personal data → private GitHub repo
 ├── Brewfile              # brew bundle manifest
 ├── scripts/
 │   ├── 00-preflight.sh   # xcode CLT + brew
 │   ├── 10-brew-bundle.sh # everything in Brewfile
-│   ├── 15-restore-backup.sh   # unpacks backup.sh archive, rebuilds venvs/node_modules
+│   ├── 15-restore-backup.sh   # pulls + decrypts the GitHub backup, rebuilds venvs/node_modules
 │   ├── 20-dotfiles.sh    # symlink with timestamped backup of anything replaced
 │   ├── 30-macos-defaults.sh
 │   ├── 40-tools.sh       # ytermusic fork, Claude Code, Ruby, uv tools
